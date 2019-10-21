@@ -47,6 +47,7 @@ try_files $uri $uri/ /index.html last;
 
 #### mysql
 * mysql导入sql文件  /server-go/sql/table.sql 
+* 修改 /server-go/conf/app.conf 数据库配置
 
 #### 运行
 

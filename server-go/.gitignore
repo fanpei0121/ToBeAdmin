@@ -1,0 +1,15 @@
+/.idea
+/.vscode
+/vendor
+*.log
+thinkphp
+.env
+composer.lock
+node_modules
+/.DS_Store
+/config/app.php
+/config/database.php
+server-go.exe
+server-go.exe~
+static/upload/*
+logs/logs.log

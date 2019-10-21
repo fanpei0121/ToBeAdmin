@@ -10,6 +10,11 @@ ORM: gorm http://gorm.book.jasperxu.com/
 Ant Design Pro Vue文档: https://pro.loacg.com/docs/getting-started
 
 **预览:**
+
+http://148.70.234.18
+
+
+
 ![1.png](https://image.jnemall.com/uploads/attachment/20191021/4487711810264ac99177ba5eb9f7e6b3.jpg)
 
 ![2.png](https://image.jnemall.com/uploads/attachment/20191021/676656cd0bd2536dbca48c8bf8a1c988.png)

@@ -42,8 +42,12 @@ npm run serve
 npm run build
 ```
 #### 刷新404问题
-```nginx
-try_files $uri $uri/ /index.html last;
+```
+nginx 加上几行配置
+
+location / {
+    try_files $uri $uri/ /index.html last;
+}
 ```
 #### 后端API配置
 /client/src/config/defaultSettings.js  修改 baseURL

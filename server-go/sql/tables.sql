@@ -142,7 +142,7 @@ CREATE TABLE `auth_user` (
 
 insert  into `auth_user`(`id`,`name`,`nickname`,`password`,`remark`,`headimg`,`email`,`status`) values 
 (1,'admin','超级管理员','$2a$10$HsVrWexilee9vj8BtnjvV.N5PE1Wont8wtalz2KTkdamsdcCssjC6','','static/upload/15716369254046e1b52af2f6e12b937a95f7ce710d.jpg','349119104@qq.com',1),
-(2,'test','fanpei','$2a$10$mFMiXaPFYiU8ErVCy8KkzevhPaO8o9v.N87zcuOS5JdmGTHDaOFji','121313131','static/upload/15715722282.jpg','349119104@qq.com',1);
+(2,'test','fanpei','$2a$10$214b0YutP5lbvVN0JJW56O2GCOlmZ5Onjmzmi4FC84vG0s59GpKs2','121313131','static/upload/15716471864046e1b52af2f6e12b937a95f7ce710d.jpg','349119104@qq.com',1);
 
 /*Table structure for table `auth_user_role_access` */
 

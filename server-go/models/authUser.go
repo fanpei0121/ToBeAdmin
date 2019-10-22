@@ -25,22 +25,26 @@ func (t *AuthUser) GetSupperId() int {
 }
 
 // 账号检测
-func (t *AuthUser) Check(param map[string]string) (bool, string) {
+func (t *AuthUser) Check(param map[string]string) (string, error) {
 	var user AuthUser
-	db.Where("name = ?", param["username"]).First(&user)
+	if err := db.Where("name = ?", param["username"]).First(&user).Error; err != nil {
+		beego.Error(err)
+		return "", err
+	}
 	if user.Status != 1 {
-		return false, "账号被禁用"
+		return "", errors.New("账号被禁用")
 	}
 	if !helper.PasswordVerify(param["password"], user.Password) {
-		return false, "账号或密码不正确"
+		return "", errors.New("账号或密码不正确")
 	}
 	jwtParam := make(map[string]interface{})
 	jwtParam["uid"] = user.Id
 	tokenString, err := jwtx.GenToken(jwtParam)
 	if err != nil {
-		panic(err)
+		beego.Error(err)
+		return "", err
 	}
-	return true, tokenString
+	return tokenString, nil
 }
 
 // 用户信息
@@ -98,6 +102,7 @@ func (t *AuthUser) Add(param map[string]interface{}) error {
 	newPass, err := helper.PasswordHash(param["password"].(string))
 	roles := param["roles"].([]interface{})
 	if err != nil {
+		beego.Error(err)
 		return err
 	}
 	user := AuthUser{
@@ -108,6 +113,7 @@ func (t *AuthUser) Add(param map[string]interface{}) error {
 	}
 	err = db.Create(&user).Error
 	if err != nil {
+		beego.Error(err)
 		return err
 	}
 	sql := "INSERT INTO `auth_user_role_access` (`user_id`,`role_id`) VALUES"
@@ -120,6 +126,7 @@ func (t *AuthUser) Add(param map[string]interface{}) error {
 	}
 	err = db.Exec(sql).Error
 	if err != nil {
+		beego.Error(err)
 		return err
 	}
 	return nil
@@ -135,11 +142,13 @@ func (t *AuthUser) Delete(userId int) error {
 	tx := db.Begin()
 	err := db.Where("id = ?", userId).Delete(&AuthUser{}).Error
 	if err != nil {
+		beego.Error(err)
 		tx.Rollback()
 		return err
 	}
 	err = db.Where("user_id = ?", userId).Delete(&AuthUserRoleAccess{}).Error
 	if err != nil {
+		beego.Error(err)
 		tx.Rollback()
 		return err
 	}
@@ -153,6 +162,7 @@ func (t *AuthUser) Edit(userId int, param map[string]interface{}) error {
 	var user AuthUser
 	err := tx.Where("id = ?", userId).First(&user).Error
 	if err != nil {
+		beego.Error(err)
 		tx.Rollback()
 		return err
 	}
@@ -165,17 +175,20 @@ func (t *AuthUser) Edit(userId int, param map[string]interface{}) error {
 	if ok {
 		newPass, err := helper.PasswordHash(password)
 		if err != nil {
+			beego.Error(err)
 			return err
 		}
 		editUser.Password = newPass
 	}
 	err = tx.Model(&user).UpdateColumns(editUser).Error
 	if err != nil {
+		beego.Error(err)
 		tx.Rollback()
 		return err
 	}
 	err = tx.Where("user_id = ?", userId).Delete(&AuthUserRoleAccess{}).Error
 	if err != nil {
+		beego.Error(err)
 		tx.Rollback()
 		return err
 	}
@@ -191,6 +204,7 @@ func (t *AuthUser) Edit(userId int, param map[string]interface{}) error {
 	}
 	err = tx.Exec(sql).Error
 	if err != nil {
+		beego.Error(err)
 		tx.Rollback()
 		return err
 	}

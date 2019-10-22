@@ -14,15 +14,13 @@ func (t *AuthController) DoLogin() {
 	param := make(map[string]string)
 	t.GetJsonParam(&param)
 	var authUser models.AuthUser
-	check, tokenOrMsg := authUser.Check(param)
-	if check {
-		data := make(map[string]string)
-		data["token"] = tokenOrMsg
-		t.Success("success", data)
-	} else {
-		t.Error(tokenOrMsg)
+	tokenOrMsg, err := authUser.Check(param)
+	if err != nil {
+		t.Error(err.Error())
 	}
-
+	data := make(map[string]string)
+	data["token"] = tokenOrMsg
+	t.Success("success", data)
 }
 
 func (t *AuthController) Logout() {

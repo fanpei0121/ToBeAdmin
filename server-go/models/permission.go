@@ -1,5 +1,7 @@
 package models
 
+import "github.com/astaxie/beego"
+
 type AuthPermission struct {
 	Id     int    `gorm:"primary_key" json:"id"`
 	Action string `json:"action"`
@@ -142,6 +144,7 @@ func (t *AuthPermission) Add(param map[string]interface{}) error {
 		Status: int(param["status"].(float64)),
 	}
 	if err := db.Create(&authPermission).Error; err != nil {
+		beego.Error(err)
 		return err
 	}
 	return nil
@@ -153,6 +156,7 @@ func (t *AuthPermission) Edit(id int, param map[string]interface{}) error {
 	db.Where("id = ? ", id).First(&authPermission)
 	err := db.Model(&authPermission).Updates(param).Error;
 	if err != nil {
+		beego.Error(err)
 		return err
 	}
 	return nil
@@ -163,6 +167,7 @@ func (t *AuthPermission) Delete(id int) error {
 	db.Where("id = ? ", id).First(&authPermission)
 	err := db.Delete(&authPermission).Error;
 	if err != nil {
+		beego.Error(err)
 		return err
 	}
 	return nil

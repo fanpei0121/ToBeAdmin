@@ -37,6 +37,7 @@ func (t *BaseController) Error(message string) {
 func (t *BaseController) GetJsonParam(param interface{}) {
 	err := json.Unmarshal(t.Ctx.Input.RequestBody, param)
 	if err != nil {
+		beego.Error(err)
 		t.Error("ParametersError")
 	}
 }
@@ -49,6 +50,7 @@ func (t *BaseController) FilterPermission(permission string) beego.FilterFunc {
 		retData := make(map[string]interface{})
 		retData["code"] = 50015
 		if err != nil {
+			beego.Error(err)
 			retData["message"] = "ParametersError"
 			ctx.Output.JSON(retData, true, true)
 		}
@@ -93,6 +95,7 @@ func (t *BaseController) GetUidByHead() int {
 	}
 	claims, err := jwtx.ParseToken(tokenString)
 	if err != nil {
+		beego.Error(err)
 		t.Error("参数错误")
 	}
 	uid := int(claims["uid"].(float64))

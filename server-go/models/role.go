@@ -1,6 +1,9 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/astaxie/beego"
+)
 
 type AuthRole struct {
 	Id     int    `gorm:"primary_key" json:"id"`
@@ -36,6 +39,7 @@ func (t *AuthRole) Roles(page int, pageSize int) (map[string]interface{}, error)
 		var ids []int
 		err = db.Table("auth_role_permission_access").Where("role_id = ?", v.Id).Pluck("permission_id", &ids).Error
 		if err != nil {
+			beego.Error(err)
 			return nil, err
 		}
 		listParams = append(listParams, listParam{
@@ -73,6 +77,7 @@ func (t *AuthRole) Add(param map[string]interface{}) error {
 		Status: int(param["status"].(float64)),
 	}
 	if err := db.Create(&role).Error; err != nil {
+		beego.Error(err)
 		return err
 	}
 	permissionIds := param["rules"].([]interface{})
@@ -105,6 +110,7 @@ func (t *AuthRole) Edit(roleId int, param map[string]interface{}) error {
 		Status: int(param["status"].(float64)),
 	}).Error
 	if err != nil {
+		beego.Error(err)
 		return err
 	}
 	// 删除关联
@@ -130,11 +136,13 @@ func (t *AuthRole) Delete(roleId int) error {
 
 	err := db.Where("id = ?", roleId).Delete(&AuthRole{}).Error
 	if err != nil {
+		beego.Error(err)
 		tx.Rollback()
 		return err
 	}
 	err = db.Where("role_id = ?", roleId).Delete(&AuthRolePermissionAccess{}).Error
 	if err != nil {
+		beego.Error(err)
 		tx.Rollback()
 		return err
 	}

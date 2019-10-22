@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/astaxie/beego"
 	"server-go/models"
 )
 
@@ -54,7 +55,7 @@ func (t *RbacController) RuleEdit() {
 func (t *RbacController) RuleDelete() {
 	id, err := t.GetInt(":id", 0)
 	if err != nil {
-		t.Error("paramError")
+		t.Error(err.Error())
 	}
 	err = authPermissionModel.Delete(id)
 	if err != nil {
@@ -97,11 +98,13 @@ func (t *RbacController) Roles() {
 	page, err := t.GetInt("page", 1)
 	pageSize, err := t.GetInt("pageSize", 10)
 	if err != nil {
-		t.Error("参数错误")
+		beego.Error(err)
+		t.Error(err.Error())
 	}
 	roles, err := authRoleModel.Roles(page, pageSize)
 	if err != nil {
-		panic(err)
+		beego.Error(err)
+		t.Error(err.Error())
 	}
 	t.Success("success", roles)
 }
@@ -115,6 +118,7 @@ func (t *RbacController) RoleAdd() {
 	if err == nil {
 		t.Success("新增成功")
 	} else {
+		beego.Error(err)
 		t.Error("新增失败, 唯一标识重复")
 	}
 }
@@ -142,7 +146,7 @@ func (t *RbacController) RoleDelete() {
 	}
 	err = authRoleModel.Delete(roleId)
 	if err != nil {
-		t.Error("删除失败")
+		t.Abort("500")
 	}
 	t.Success("删除成功")
 }
@@ -154,18 +158,19 @@ func (t *RbacController) Users() {
 	page, err := t.GetInt("page", 1)
 	pageSize, err := t.GetInt("pageSize", 10)
 	if err != nil {
-		t.Error("paramError")
+		beego.Error(err)
+		t.Error(err.Error())
 	}
 	retData := make(map[string]interface{})
 	data, err := authRoleModel.Roles(1, 1000)
 	if err != nil {
-		panic(err)
+		t.Abort("500")
 	}
 	retData["roles"] = data["roles"]
 	retData["rules"] = data["rules"]
 	users, err := userModel.Users(page, pageSize)
 	if err != nil {
-		panic(err)
+		t.Abort("500")
 	}
 	retData["users"] = users
 	t.Success("success", retData)
@@ -177,8 +182,7 @@ func (t *RbacController) UserAdd() {
 	t.GetJsonParam(&param)
 	err := userModel.Add(param)
 	if err != nil {
-		panic(err)
-		t.Error("新增失败")
+		t.Abort("500")
 	}
 	t.Success("新增成功")
 }
@@ -187,11 +191,11 @@ func (t *RbacController) UserAdd() {
 func (t *RbacController) UserDelete() {
 	userId, err := t.GetInt(":id", 0)
 	if err != nil || userId == 0 {
-		t.Error("paramError")
+		t.Error(err.Error())
 	}
 	err = userModel.Delete(userId)
 	if err != nil {
-		t.Error("删除失败")
+		t.Abort("500")
 	}
 	t.Success("删除成功")
 }
@@ -200,14 +204,13 @@ func (t *RbacController) UserDelete() {
 func (t *RbacController) UserEdit() {
 	userId, err := t.GetInt(":id", 0)
 	if err != nil || userId == 0 {
-		t.Error("paramError")
+		t.Error(err.Error())
 	}
 	param := make(map[string]interface{})
 	t.GetJsonParam(&param)
 	err = userModel.Edit(userId, param)
 	if err != nil {
-		panic(err)
-		t.Error("修改失败")
+		t.Abort("500")
 	}
 	t.Success("修改成功")
 }

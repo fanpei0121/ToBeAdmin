@@ -93,6 +93,9 @@ func (t *AuthController) Setting() {
 	t.GetJsonParam(&param)
 	userId := t.GetUidByHead()
 	var userModel models.AuthUser
+	//if userId == userModel.GetSupperId() {
+	//	t.Error("预览版，不能修改超级管理员资料")
+	//}
 	err := userModel.Setting(userId, param)
 	if err != nil {
 		t.Error(err.Error())

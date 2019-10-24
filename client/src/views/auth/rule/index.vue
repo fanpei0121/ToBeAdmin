@@ -27,7 +27,7 @@
         </a-form-item>
 
         <a-form-item label="权限名称">
-          <a-input 
+          <a-input
             placeholder="权限名称"
             v-decorator="['title', {
               rules: [{ required: true, message: '请输入权限名称!' }]
@@ -87,7 +87,6 @@
             <a-popover
               :key="index"
               title="详情"
-              trigger="click"
             >
               <template slot="content">
                 <div style="margin-bottom:15px">唯一识别码: {{ action.action }}</div>

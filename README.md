@@ -5,7 +5,7 @@ beego 与 Ant Design Pro Vue 基础权限系统
 
 后端: https://beego.me/ 
 
-ORM: gorm http://gorm.book.jasperxu.com/
+ORM: gorm https://gorm.io/zh_CN/docs/
 
 Ant Design Pro Vue文档: https://pro.loacg.com/docs/getting-started
 

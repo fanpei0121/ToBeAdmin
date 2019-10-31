@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 //gorm全局变量
@@ -32,6 +33,7 @@ func RegisterGormDB() {
 	if beego.AppConfig.DefaultBool("ormdebug", false) { // 启用Logger，显示详细日志
 		db.LogMode(true)
 	}
+	db.DB().SetConnMaxLifetime(time.Second * 500) // 超时时间
 	// 全局禁用表名复数
 	db.SingularTable(true) // 如果设置为true,`User`的默认表名为`user`,使用`TableName`设置的表名不受影响
 	//您可以通过定义DefaultTableNameHandler对默认表名应用任何规则。

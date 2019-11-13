@@ -3,7 +3,7 @@
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 beego 与 Ant Design Pro Vue 基础权限系统  
 
-后端: https://beego.me/ 
+后端: http://beego.me 
 
 ORM: gorm https://gorm.io/zh_CN/docs/
 

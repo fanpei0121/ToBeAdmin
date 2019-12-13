@@ -11,7 +11,7 @@ Ant Design Pro Vue文档: https://pro.loacg.com/docs/getting-started
 
 **预览:**
 
-http://www.micro123.cn
+http://148.70.234.18
 
 
 

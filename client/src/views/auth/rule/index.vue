@@ -72,7 +72,7 @@
 
     <a-card>
       <a-row class="tools">
-        <a-button v-action:add type="primary" ghost @click="openModal">添加</a-button>
+        <a-button v-action:add  type="primary" @click="openModal" icon="plus">新增</a-button>
       </a-row>
 
       <a-table :columns="columns"
@@ -104,8 +104,18 @@
         </template>
 
         <template slot="tools" slot-scope="row">
-          <a-button v-action:update type="primary" ghost @click="openActionModal(row)" style="margin-right: 15px">编辑</a-button>
-          <a-button v-action:delete type="danger" ghost @click="showDeleteConfirm(row.id)">删除</a-button>
+          <a href="javascript:;" v-action:update type="primary" ghost @click="openActionModal(row)" style="margin-right: 15px">编辑</a>
+          <a-dropdown>
+            <a class="ant-dropdown-link" href="#">
+              更多 <a-icon type="down" />
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item>
+                <a href="javascript:;" v-action:delete type="danger" ghost @click="showDeleteConfirm(row.id)">删除</a>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
+
         </template>
       </a-table>
     </a-card>
@@ -113,7 +123,6 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import { createElement } from 'vue'
 const columns = [{
   title: '唯一识别码',
   dataIndex: 'permissionId',

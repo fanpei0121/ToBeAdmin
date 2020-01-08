@@ -44,7 +44,9 @@ func (t *AuthPermission) GetAllPermissions() []int {
 //根据权限id获取权限
 func (t *AuthPermission) GetPermissions(permissionIds []int) []*AuthPermission {
 	var permissions []*AuthPermission
-	db.Where("id in (?)", permissionIds).Find(&permissions)
+	if db.Where("id in (?)", permissionIds).Find(&permissions).RecordNotFound() {
+		return nil
+	}
 	return permissions
 }
 
@@ -154,7 +156,7 @@ func (t *AuthPermission) Add(param map[string]interface{}) error {
 func (t *AuthPermission) Edit(id int, param map[string]interface{}) error {
 	var authPermission AuthPermission
 	db.Where("id = ? ", id).First(&authPermission)
-	err := db.Model(&authPermission).Updates(param).Error;
+	err := db.Model(&authPermission).Updates(param).Error
 	if err != nil {
 		beego.Error(err)
 		return err
@@ -165,7 +167,7 @@ func (t *AuthPermission) Edit(id int, param map[string]interface{}) error {
 func (t *AuthPermission) Delete(id int) error {
 	var authPermission AuthPermission
 	db.Where("id = ? ", id).First(&authPermission)
-	err := db.Delete(&authPermission).Error;
+	err := db.Delete(&authPermission).Error
 	if err != nil {
 		beego.Error(err)
 		return err

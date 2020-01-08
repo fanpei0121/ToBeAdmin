@@ -50,7 +50,9 @@ func (t *AuthUser) Check(param map[string]string) (string, error) {
 // 用户信息
 func (t *AuthUser) Info(id int) AuthUser {
 	var user AuthUser
-	db.Where("id = ?", id).First(&user)
+	if db.Where("id = ?", id).First(&user).RecordNotFound() {
+		return AuthUser{}
+	}
 	return user
 }
 
